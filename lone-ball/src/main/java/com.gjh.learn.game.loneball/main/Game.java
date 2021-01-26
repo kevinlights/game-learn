@@ -40,7 +40,7 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void setCurrentState(State newState) {
-        System.gc();
+        // System.gc();
         currentState = newState;
         newState.init();
         inputHandler.setCurrentState(currentState);
@@ -74,7 +74,9 @@ public class Game extends JPanel implements Runnable {
         while (running) {
             currentState.update();
             prepareGameImage();
-            currentState.render(gameImage.getGraphics());
+            if (null != gameImage && null != gameImage.getGraphics()) {
+                currentState.render(gameImage.getGraphics());
+            }
             // will trigger paintComponent
             repaint();
             try {

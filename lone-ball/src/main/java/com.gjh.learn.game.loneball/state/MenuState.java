@@ -31,6 +31,7 @@ public class MenuState extends State{
     @Override
     public void onClick(MouseEvent e) {
         LogUtil.debug("onClick");
+        setCurrentState(new PlayState());
     }
 
     @Override
