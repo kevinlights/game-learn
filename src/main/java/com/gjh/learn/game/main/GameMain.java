@@ -23,5 +23,6 @@ public class GameMain {
         frame.pack();
 
         frame.setVisible(true);
+        frame.setIconImage(Resources.iconImage);
     }
 }
