@@ -12,35 +12,34 @@ import java.awt.event.MouseEvent;
  *
  * @author kevinlights
  */
-public class LoadState extends State{
+public class MenuState extends State{
     @Override
     public void init() {
-        Resources.load();
-        LogUtil.info("Loaded Successfully");
+        LogUtil.info("Entered MenuState");
     }
 
     @Override
-    public void update() {
-        setCurrentState(new MenuState());
+    public void update(float delta) {
+
     }
 
     @Override
     public void render(Graphics g) {
-
+        g.drawImage(Resources.welcome, 0, 0, null);
     }
 
     @Override
     public void onClick(MouseEvent e) {
-
+        LogUtil.debug("onClick");
     }
 
     @Override
     public void onKeyPress(KeyEvent e) {
-
+        LogUtil.debug("onKeyPress");
     }
 
     @Override
     public void onKeyRelease(KeyEvent e) {
-
+        LogUtil.debug("onKeyRelease");
     }
 }

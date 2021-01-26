@@ -60,31 +60,56 @@ public class Game extends JPanel implements Runnable {
         gameThread.start();
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        if (gameImage == null) {
-            return;
+
+    /**
+     * 自定义主动渲染方法
+     * @param g
+     */
+    private void renderGameImage(Graphics g) {
+        if (gameImage != null) {
+            g.drawImage(gameImage, 0, 0, null);
         }
-        g.drawImage(gameImage, 0, 0, null);
+        g.dispose();
     }
 
     @Override
     public void run() {
+        // 按照每秒 60 帧 (FPS) 的速率计算，一次迭代需要 1 / 60 约为 17 毫秒
+        // 睡眠时间应按照实际 更新-渲染 的用时来计算
+        long updateDurationMillis = 0;
+        long sleepDurationMillis = 0;
         while (running) {
-            currentState.update();
-            prepareGameImage();
-            currentState.render(gameImage.getGraphics());
-            // will trigger paintComponent
-            repaint();
+            long beforeUpdaedRender = System.nanoTime();
+            long deltaMillis = updateDurationMillis + sleepDurationMillis;
+
+            updateAndRender(deltaMillis);
+
+            updateDurationMillis = (System.nanoTime() - beforeUpdaedRender) / 1000000L;
+            sleepDurationMillis = Math.max(2, 17 - updateDurationMillis);
             try {
-                Thread.sleep(14);
+                Thread.sleep(sleepDurationMillis);
             } catch (InterruptedException e) {
                 LogUtil.error("sleep interrupted error: %s", e.toString());
             }
         }
         System.exit(0);
     }
+
+    /**
+     * @param deltaMillis
+     */
+    private void updateAndRender(long deltaMillis) {
+        currentState.update(deltaMillis / 1000f);
+        prepareGameImage();
+        if (null != gameImage && null != gameImage.getGraphics()) {
+            currentState.render(gameImage.getGraphics());
+        }
+        // will trigger paintComponent
+        // repaint();
+        renderGameImage(getGraphics());
+    }
+
+
 
     public void exit() {
         running = false;
