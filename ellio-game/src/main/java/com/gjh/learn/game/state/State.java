@@ -12,6 +12,9 @@ import java.awt.event.*;
  */
 public abstract class State {
 
+    protected boolean inited = false;
+    protected boolean rendered = false;
+
     public abstract void init();
 
     public abstract void update(float delta);
